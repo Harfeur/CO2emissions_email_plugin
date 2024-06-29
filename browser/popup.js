@@ -106,12 +106,12 @@ async function calculate() {
     let preferencesValues = await browser.storage.local.get(["CO2", "CO2u", "KWH_STOCK", "ELEC_STOCK", "OIL", "CAR", "TGV", "BULB", "BULBW", "BREATHING"]);
     CO2 = preferencesValues.CO2 ? parseFloat(preferencesValues.CO2) : 13; // en g/Mo
     CO2u = preferencesValues.CO2u ? parseFloat(preferencesValues.CO2u) : 6; // en g/Mo
-    KWH_STOCK = preferencesValues.KWH_STOCK ? parseFloat(preferencesValues.KWH_STOCK) : 2.35089166756806; // en kWh/Go/an
-    ELEC_STOCK = preferencesValues.ELEC_STOCK ? parseFloat(preferencesValues.ELEC_STOCK.elec) : 0.0569; // en g CO2e/Wh
+    KWH_STOCK = preferencesValues.KWH_STOCK ? parseFloat(preferencesValues.KWH_STOCK) : 0.130333033; // en kWh/Go/an
+    ELEC_STOCK = preferencesValues.ELEC_STOCK ? parseFloat(preferencesValues.ELEC_STOCK.elec) : 0.0520; // en g CO2e/Wh
     OIL = preferencesValues.OIL ? parseFloat(preferencesValues.OIL) : 3.34; // en g CO2e/g de pétrole
-    CAR = preferencesValues.CAR ? parseFloat(preferencesValues.CAR) : 0.192; // en g CO2e/m
-    TGV = preferencesValues.TGV ? parseFloat(preferencesValues.TGV) : 1.73e-3; // en g CO2e/m
-    BULB = preferencesValues.BULB ? parseFloat(preferencesValues.BULB) : 0.0569 / 60; // en g CO2e/(W.min) (électricité)
+    CAR = preferencesValues.CAR ? parseFloat(preferencesValues.CAR) : 0.1901; // en g CO2e/m
+    TGV = preferencesValues.TGV ? parseFloat(preferencesValues.TGV) : 2.30e-3; // en g CO2e/m
+    BULB = preferencesValues.BULB ? parseFloat(preferencesValues.BULB) : 0.0520 / 60; // en g CO2e/(W.min) (électricité)
     BULBW = preferencesValues.BULBW ? parseFloat(preferencesValues.BULBW) : 40; // en W
     document.getElementById("bulbw").insertAdjacentHTML('beforeend', " " + BULBW + " W");
     BREATHING = preferencesValues.BREATHING ? parseFloat(preferencesValues.BREATHING) : 1.131; // en g CO2/min
