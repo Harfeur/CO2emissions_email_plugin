@@ -84,7 +84,7 @@ async function calculate(tabInfo) {
     // Affichage avertissement en cas de pièce jointe équivalente à 1 Mo
     var needsAttachmentWarning = recipientsCount === 0 ? (attachmentsSize / MO >= 1) : (attachmentsSize * recipientsCount / MO >= 1); // si pièce jointe grosse et/ou envoyée à trop de destinataires
     if (needsAttachmentWarning) {
-        document.getElementById("attachmentWarning").innerHTML = '<img src="../images/warning-icon-red.png" alt="Warning icon" title="Warning" height="14px" /><span class="tooltiptext tooltiptext-left" style="width: 130px; margin-top: -25px;"><small>' + browser.i18n.getMessage("composePopupSizesAttachmentWarning") + '<a href="https://alt.framasoft.org/fr/framadrop">' + browser.i18n.getMessage("composePopupSizesAttachmentWarningLink") + '</a>' + browser.i18n.getMessage("punctuationSpace") + '!</small></span>';
+        document.getElementById("attachmentWarning").innerHTML = '<img src="../images/warning-icon-red.png" alt="Warning icon" title="Warning" height="14px" /><span class="tooltiptext tooltiptext-left" style="width: 130px; margin-top: -25px;"><small>' + browser.i18n.getMessage("composePopupSizesAttachmentWarning") + " " + '<a href="https://alt.framasoft.org/fr/framadrop">' + browser.i18n.getMessage("composePopupSizesAttachmentWarningLink") + '</a>' + browser.i18n.getMessage("punctuationSpace") + '!</small></span>';
     }
 
     // Affichage avertissement en cas d'un grand nombre de destinataires
