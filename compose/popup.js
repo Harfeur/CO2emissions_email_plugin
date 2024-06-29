@@ -190,7 +190,7 @@ async function removeEquivalences(tab) {
  */
 function openRecommendations() {
     browser.tabs.create({
-        url: "https://librairie.ademe.fr/cadic/4932/guide-pratique-face-cachee-numerique.pdf?modal=false"
+        url: "https://librairie.ademe.fr/ged/6555/guide-en-route-vers-sobriete-numerique-202209.pdf"
     }).then(tab => {
         browser.windows.update(tab.windowId, {
             focused: true
