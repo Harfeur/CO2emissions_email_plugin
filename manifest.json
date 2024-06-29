@@ -3,7 +3,7 @@
     "name": "__MSG_extensionName__",
     "short_name": "__MSG_extensionShortName__",
     "description": "__MSG_extensionDescription__",
-    "version": "2.7.5",
+    "version": "2.7.6",
     "default_locale": "fr",
     "author": "Maxime Chourré & Alexandre Couvez",
     "homepage_url": "https://github.com/Harfeur/CO2emissions_email_plugin",
