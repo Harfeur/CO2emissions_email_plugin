@@ -54,10 +54,10 @@ async function calculate(tabInfo) {
     totalSize = headerSize + messageBodySize + attachmentsSize;
 
     // Affichage des différentes tailles calculées
-    document.getElementById("header-size").innerHTML = formatBytes(headerSize);
-    document.getElementById("body-size").innerHTML = formatBytes(messageBodySize)
-    document.getElementById("attachments-size").innerHTML = formatBytes(attachmentsSize);
-    document.getElementById("size").innerHTML = formatBytes(totalSize);
+    document.getElementById("header-size").replaceChildren(formatBytes(headerSize));
+    document.getElementById("body-size").replaceChildren(formatBytes(messageBodySize));
+    document.getElementById("attachments-size").replaceChildren(formatBytes(attachmentsSize));
+    document.getElementById("size").replaceChildren(formatBytes(totalSize));
 
     // Calcul des différentes équivalences
     co2 = recipientsCount === 0 ? totalSize * (CO2 + CO2u) / MO : totalSize * (CO2 + recipientsCount * CO2u) / MO;
@@ -68,29 +68,90 @@ async function calculate(tabInfo) {
     respiration = co2 / BREATHING;
 
     // Affichage des équivalences
-    document.getElementById("co2").innerHTML = formatGrammes(co2) + (recipientsCount === 0 ? "/<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("recipientShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("recipient") + "</span></div>" : "");
-    document.getElementById("oil").innerHTML = formatGrammes(petrole) + (recipientsCount === 0 ? "/<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("recipientShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("recipient") + "</span></div>" : "");
-    document.getElementById("car").innerHTML = formatDistance(voiture) + (recipientsCount === 0 ? "/<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("recipientShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("recipient") + "</span></div>" : "");
-    document.getElementById("tgv").innerHTML = formatDistance(tgv) + (recipientsCount === 0 ? "/<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("recipientShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("recipient") + "</span></div>" : "");
+    const span_tooltip = document.createElement("span");
+    span_tooltip.className = "tooltiptext tooltiptext-left"
+    span_tooltip.textContent = browser.i18n.getMessage("recipient");
+
+    const recipent_tooltip = document.createElement("div");
+    recipent_tooltip.className = "tooltip tooltip-left";
+    recipent_tooltip.textContent = browser.i18n.getMessage("recipientShort");
+    recipent_tooltip.appendChild(span_tooltip);
+
+    document.getElementById("co2").textContent = formatGrammes(co2)
+    document.getElementById("oil").textContent = formatGrammes(petrole)
+    document.getElementById("car").textContent = formatDistance(voiture)
+    document.getElementById("tgv").textContent = formatDistance(tgv)
     document.getElementById("bulbw").insertAdjacentHTML('beforeend', " " + BULBW + " W");
-    document.getElementById("bulb").innerHTML = formatTime(ampoule) + (recipientsCount === 0 ? "/<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("recipientShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("recipient") + "</span></div>" : "");
-    document.getElementById("breathing").innerHTML = formatTime(respiration) + (recipientsCount === 0 ? "/<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("recipientShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("recipient") + "</span></div>" : "");
+    document.getElementById("bulb").textContent = formatTime(ampoule)
+    document.getElementById("breathing").textContent = formatTime(respiration)
+
+    if (recipientsCount === 0) {
+        document.getElementById("co2").textContent += " / ";
+        document.getElementById("oil").textContent += " / ";
+        document.getElementById("car").textContent += " / ";
+        document.getElementById("tgv").textContent += " / ";
+        document.getElementById("bulb").textContent += " / ";
+        document.getElementById("breathing").textContent += " / ";
+
+        document.getElementById("co2").append(recipent_tooltip.cloneNode(true));
+        document.getElementById("oil").append(recipent_tooltip.cloneNode(true));
+        document.getElementById("car").append(recipent_tooltip.cloneNode(true));
+        document.getElementById("tgv").append(recipent_tooltip.cloneNode(true));
+        document.getElementById("bulb").append(recipent_tooltip.cloneNode(true));
+        document.getElementById("breathing").append(recipent_tooltip.cloneNode(true));
+    }
 
     // Paramétrage des boutons pour ajouter / supprimer la signature
     document.getElementById("addEqui").onclick = () => { addEquivalences(tabInfo[0].id) };
     document.getElementById("removeEqui").onclick = () => { removeEquivalences(tabInfo[0].id) };
     document.getElementById("openRecommendations").onclick = () => { openRecommendations() };
 
+
+    const attachement_warning_1 = document.createElement('img');
+    attachement_warning_1.setAttribute('src', '../images/warning-icon-red.png');
+    attachement_warning_1.setAttribute('alt', 'Warning icon');
+    attachement_warning_1.setAttribute('height', '14px');
+
+    const attachement_warning_2 = document.createElement('span');
+    attachement_warning_2.setAttribute('class', 'tooltiptext tooltiptext-left');
+    attachement_warning_2.setAttribute('style', 'width: 130px; margin-top: -25px;');
+
+    const attachement_warning_3 = document.createElement('small');
+    attachement_warning_2.appendChild(attachement_warning_3);
+
+    const attachement_warning_4 = document.createElement('span');
+    attachement_warning_3.textContent = browser.i18n.getMessage("composePopupSizesAttachmentWarning") + " ";
+    attachement_warning_3.appendChild(attachement_warning_4);
+
+    const attachement_warning_5 = document.createElement('a');
+    attachement_warning_5.textContent = browser.i18n.getMessage("composePopupSizesAttachmentWarningLink");
+    attachement_warning_5.setAttribute('href', 'https://alt.framasoft.org/fr/framadrop');
+    attachement_warning_3.appendChild(attachement_warning_5);
+
+    const attachement_warning_6 = document.createElement('span');
+    attachement_warning_6.textContent = browser.i18n.getMessage("punctuationSpace") + "!";
+    attachement_warning_3.appendChild(attachement_warning_6);
+
     // Affichage avertissement en cas de pièce jointe équivalente à 1 Mo
     var needsAttachmentWarning = recipientsCount === 0 ? (attachmentsSize / MO >= 1) : (attachmentsSize * recipientsCount / MO >= 1); // si pièce jointe grosse et/ou envoyée à trop de destinataires
     if (needsAttachmentWarning) {
-        document.getElementById("attachmentWarning").innerHTML = '<img src="../images/warning-icon-red.png" alt="Warning icon" title="Warning" height="14px" /><span class="tooltiptext tooltiptext-left" style="width: 130px; margin-top: -25px;"><small>' + browser.i18n.getMessage("composePopupSizesAttachmentWarning") + " " + '<a href="https://alt.framasoft.org/fr/framadrop">' + browser.i18n.getMessage("composePopupSizesAttachmentWarningLink") + '</a>' + browser.i18n.getMessage("punctuationSpace") + '!</small></span>';
+        document.getElementById("attachmentWarning").replaceChildren(attachement_warning_1, attachement_warning_2)
     }
+
+    const recipents_warning_1 = attachement_warning_1.cloneNode(true);
+
+    const recipents_warning_2 = document.createElement("span");
+    recipents_warning_2.setAttribute('class', 'tooltiptext tooltiptext-left ');
+    recipents_warning_2.setAttribute('style', 'width: 190px; margin-top: -14px;');
+
+    const recipents_warning_3 = document.createElement('small');
+    recipents_warning_3.textContent = browser.i18n.getMessage("composePopupSizesRecipientsWarning");
+    recipents_warning_2.appendChild(recipents_warning_3);
 
     // Affichage avertissement en cas d'un grand nombre de destinataires
     var needsRecipientsWarning = recipientsCount >= 10; // si nombre de destinataires important
     if (needsRecipientsWarning) {
-        document.getElementById("recipientsWarning").innerHTML = '<img src="../images/warning-icon-red.png" alt="Warning icon" title="Warning" height="14px" /><span class="tooltiptext tooltiptext-left" style="width: 190px; margin-top: -14px;"><small>' + browser.i18n.getMessage("composePopupSizesRecipientsWarning") + '</small></span>';
+        document.getElementById("recipientsWarning").replaceChildren(recipents_warning_1, recipents_warning_2)
     }
 
     // Bouton des préférences
@@ -220,4 +281,5 @@ document.addEventListener("DOMContentLoaded", function() {
     browser.tabs.query({ currentWindow: true })
         .then(calculate)
         .catch(onError);
+    console.log(document.getElementById("co2").parentElement.innerHTML);
 });

@@ -10,23 +10,54 @@ export function lengthInUtf8Bytes(str) {
 /**
  * Renvoie un nombre formaté (octets, ko, Mo ...)
  * @param {Number} bytes
- * @param {Boolean} tooltip Afficher ou non une tooltip en HTML
+ * @param {Boolean} html Renvoyer une balise HTML
  * @param {Number} decimals Nombre de chiffres après la virgule
- * @returns {String}
+ * @returns {String | HTMLElement}
  */
-export function formatBytes(bytes, tooltip = true, decimals = 2) {
-    if (bytes === 0) return tooltip ? "0 <div class='tooltip tooltip-left'>" + browser.i18n.getMessage("byteShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("byte") + "</span></div>" : "0" + browser.i18n.getMessage("byte");
-    if (bytes < 2) return parseFloat(bytes.toFixed(decimals)).toString().replace(".", ",") + tooltip ? " <div class='tooltip tooltip-left'>o<span class='tooltiptext tooltiptext-left'>octet</span></div>" : " octet";
+export function formatBytes(bytes, html = true, decimals = 2) {
+    const span_tooltip = document.createElement("span");
+    span_tooltip.className = "tooltiptext tooltiptext-left";
+    span_tooltip.textContent = browser.i18n.getMessage("byte");
+    const div_tooltip = document.createElement("div");
+    div_tooltip.className = "tooltip tooltip-left";
+    div_tooltip.textContent = browser.i18n.getMessage("byteShort");
+    div_tooltip.appendChild(span_tooltip);
+
+    const span_result = document.createElement("span");
+
+    if (bytes === 0) {
+        span_result.textContent = "0 ";
+        span_result.appendChild(div_tooltip);
+
+        return html ? span_result : "0 " + browser.i18n.getMessage("byte");
+    }
+    if (bytes < 2) {
+        const value = bytes.toFixed(decimals).replace(".", ",") + " "
+        span_result.textContent = value;
+        span_result.appendChild(div_tooltip);
+        return html ? span_result : value + browser.i18n.getMessage("byte");
+    }
+
+    span_tooltip.textContent = browser.i18n.getMessage("bytes");
 
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
-    const sizes = [tooltip ? "<div class='tooltip tooltip-left'>" + browser.i18n.getMessage("byteShort") + "<span class='tooltiptext tooltiptext-left'>" + browser.i18n.getMessage("byte") + "s</span></div>" : browser.i18n.getMessage("byte") + "s", 'k' +
-        browser.i18n.getMessage("byteShort"), 'M' + browser.i18n.getMessage("byteShort"), 'G' + browser.i18n.getMessage("byteShort")
+    const sizes = [
+        html ? div_tooltip : browser.i18n.getMessage("bytes"), 'k' + browser.i18n.getMessage("byteShort"),
+        'M' + browser.i18n.getMessage("byteShort"), 'G' + browser.i18n.getMessage("byteShort")
     ];
 
     const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const value = (bytes / Math.pow(k, i)).toFixed(dm).replace(".", ",") + " ";
 
-    return (parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]).replace(".", ",");
+    span_result.textContent = value;
+    if (i === 0 && html) {
+        span_result.appendChild(sizes[i]);
+    } else {
+        span_result.textContent += sizes[i];
+    }
+
+    return html ? span_result : value + sizes[i]
 }
 
 /**

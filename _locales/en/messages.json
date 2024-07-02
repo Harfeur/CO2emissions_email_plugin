@@ -238,6 +238,9 @@
     "byte": {
         "message": "byte"
     },
+    "bytes": {
+        "message": "bytes"
+    },
     "dayShort": {
         "message": "d"
     },

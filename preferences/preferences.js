@@ -18,16 +18,16 @@ function saveOptionsValues(e) {
 function restoreOptionsValues() {
 
     function setCurrentChoice(result) {
-        document.querySelector("#CO2").value = result.CO2 || document.getElementById("defaultCO2").innerHTML;
-        document.querySelector("#CO2u").value = result.CO2u || document.getElementById("defaultCO2u").innerHTML;
-        document.querySelector("#KWH_STOCK").value = result.KWH_STOCK || document.getElementById("defaultKWH_STOCK").innerHTML;
-        document.querySelector("#ELEC_STOCK").value = result.ELEC_STOCK ? result.ELEC_STOCK.country : document.getElementById("defaultELEC_STOCK").innerHTML;
-        document.querySelector("#OIL").value = result.OIL || document.getElementById("defaultOIL").innerHTML;
-        document.querySelector("#CAR").value = result.CAR || document.getElementById("defaultCAR").innerHTML;
-        document.querySelector("#TGV").value = result.TGV || document.getElementById("defaultTGV").innerHTML;
-        document.querySelector("#BULB").value = result.BULB || document.getElementById("defaultBULB").innerHTML;
-        document.querySelector("#BULBW").value = result.BULBW || document.getElementById("defaultBULBW").innerHTML;
-        document.querySelector("#BREATHING").value = result.BREATHING || document.getElementById("defaultBREATHING").innerHTML;
+        document.querySelector("#CO2").value = result.CO2 || document.getElementById("defaultCO2").textContent;
+        document.querySelector("#CO2u").value = result.CO2u || document.getElementById("defaultCO2u").textContent;
+        document.querySelector("#KWH_STOCK").value = result.KWH_STOCK || document.getElementById("defaultKWH_STOCK").textContent;
+        document.querySelector("#ELEC_STOCK").value = result.ELEC_STOCK ? result.ELEC_STOCK.country : document.getElementById("defaultELEC_STOCK").textContent;
+        document.querySelector("#OIL").value = result.OIL || document.getElementById("defaultOIL").textContent;
+        document.querySelector("#CAR").value = result.CAR || document.getElementById("defaultCAR").textContent;
+        document.querySelector("#TGV").value = result.TGV || document.getElementById("defaultTGV").textContent;
+        document.querySelector("#BULB").value = result.BULB || document.getElementById("defaultBULB").textContent;
+        document.querySelector("#BULBW").value = result.BULBW || document.getElementById("defaultBULBW").textContent;
+        document.querySelector("#BREATHING").value = result.BREATHING || document.getElementById("defaultBREATHING").textContent;
     }
 
     function onError(error) {
@@ -39,16 +39,16 @@ function restoreOptionsValues() {
 }
 
 function setDefaultOptionsValues() {
-    document.querySelector("#CO2").value = document.getElementById("defaultCO2").innerHTML;
-    document.querySelector("#CO2u").value = document.getElementById("defaultCO2u").innerHTML;
-    document.querySelector("#KWH_STOCK").value = document.getElementById("defaultKWH_STOCK").innerHTML;
-    document.querySelector("#ELEC_STOCK").value = document.getElementById("defaultELEC_STOCK").innerHTML;
-    document.querySelector("#OIL").value = document.getElementById("defaultOIL").innerHTML;
-    document.querySelector("#CAR").value = document.getElementById("defaultCAR").innerHTML;
-    document.querySelector("#TGV").value = document.getElementById("defaultTGV").innerHTML;
-    document.querySelector("#BULB").value = document.getElementById("defaultBULB").innerHTML;
-    document.querySelector("#BULBW").value = document.getElementById("defaultBULBW").innerHTML;
-    document.querySelector("#BREATHING").value = document.getElementById("defaultBREATHING").innerHTML;
+    document.querySelector("#CO2").value = document.getElementById("defaultCO2").textContent;
+    document.querySelector("#CO2u").value = document.getElementById("defaultCO2u").textContent;
+    document.querySelector("#KWH_STOCK").value = document.getElementById("defaultKWH_STOCK").textContent;
+    document.querySelector("#ELEC_STOCK").value = document.getElementById("defaultELEC_STOCK").textContent;
+    document.querySelector("#OIL").value = document.getElementById("defaultOIL").textContent;
+    document.querySelector("#CAR").value = document.getElementById("defaultCAR").textContent;
+    document.querySelector("#TGV").value = document.getElementById("defaultTGV").textContent;
+    document.querySelector("#BULB").value = document.getElementById("defaultBULB").textContent;
+    document.querySelector("#BULBW").value = document.getElementById("defaultBULBW").textContent;
+    document.querySelector("#BREATHING").value = document.getElementById("defaultBREATHING").textContent;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -200,14 +200,24 @@ document.addEventListener("DOMContentLoaded", () => {
     for (var i in ELECTRICALMIXES) {
         var opt = document.createElement('option');
         opt.value = i;
-        opt.innerHTML = i;
+        opt.textContent = i;
         select.appendChild(opt);
     }
 
-    document.getElementById("ELEC_STOCK_unit").innerHTML = ELECTRICALMIXES[document.getElementById("ELEC_STOCK").value] + " g CO<sub>2</sub>e / Wh"; // afficher la valeur
+    const span_gco2 = document.createElement("span");
+    span_gco2.appendChild(document.createElement("span"));
+    span_gco2.lastChild.textContent = " g CO";
+    span_gco2.appendChild(document.createElement("sub"));
+    span_gco2.lastChild.textContent = "2";
+    span_gco2.appendChild(document.createElement("span"));
+    span_gco2.lastChild.textContent = "e / Wh"
+
+    const span_elec_stock = span_gco2.cloneNode(true);
+    span_elec_stock.firstChild.textContent = ELECTRICALMIXES[document.getElementById("ELEC_STOCK").value] + " g CO";
+    document.getElementById("ELEC_STOCK_unit").replaceChildren(span_elec_stock); // afficher la valeur
 
     document.getElementById("ELEC_STOCK").onchange = function() { // à chaque fois que le pays est modifié
-        document.getElementById("ELEC_STOCK_unit").innerHTML = ELECTRICALMIXES[document.getElementById("ELEC_STOCK").value] + " g CO<sub>2</sub>e / Wh";
+        span_elec_stock.firstChild.textContent = ELECTRICALMIXES[document.getElementById("ELEC_STOCK").value] + " g CO";
     };
 });
 document.querySelector("#valuesForm").addEventListener("submit", saveOptionsValues);

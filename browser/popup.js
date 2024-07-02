@@ -86,16 +86,16 @@ function display() {
     const ampoule = co2_storage + co2_sending / (BULBW * BULB);
     const respiration = co2_storage + co2_sending / BREATHING;
 
-    document.getElementById("size").innerHTML = formatBytes(size);
-    document.getElementById("co2_sending").innerHTML = formatGrammes(co2_sending);
-    document.getElementById("co2_storage").innerHTML = formatGrammes(co2_storage);
+    document.getElementById("size").replaceChildren(formatBytes(size));
+    document.getElementById("co2_sending").textContent = formatGrammes(co2_sending);
+    document.getElementById("co2_storage").textContent = formatGrammes(co2_storage);
 
-    document.getElementById("co2").innerHTML = formatGrammes(co2_storage + co2_sending);
-    document.getElementById("oil").innerHTML = formatGrammes(petrole);
-    document.getElementById("car").innerHTML = formatDistance(voiture);
-    document.getElementById("tgv").innerHTML = formatDistance(tgv);
-    document.getElementById("bulb").innerHTML = formatTime(ampoule);
-    document.getElementById("breathing").innerHTML = formatTime(respiration);
+    document.getElementById("co2").textContent = formatGrammes(co2_storage + co2_sending);
+    document.getElementById("oil").textContent = formatGrammes(petrole);
+    document.getElementById("car").textContent = formatDistance(voiture);
+    document.getElementById("tgv").textContent = formatDistance(tgv);
+    document.getElementById("bulb").textContent = formatTime(ampoule);
+    document.getElementById("breathing").textContent = formatTime(respiration);
 }
 
 /**
