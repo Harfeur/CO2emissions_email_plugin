@@ -7,7 +7,7 @@
     "default_locale": "fr",
     "author": "Maxime Chourré & Alexandre Couvez",
     "homepage_url": "https://github.com/Harfeur/CO2emissions_email_plugin",
-    "applications": {
+    "browser_specific_settings": {
         "gecko": {
             "id": "estimate-your-CO2@harfeur.fr",
             "strict_min_version": "78.0"
