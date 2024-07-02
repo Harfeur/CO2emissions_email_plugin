@@ -81,7 +81,7 @@ async function calculate(tabInfo) {
     document.getElementById("oil").textContent = formatGrammes(petrole)
     document.getElementById("car").textContent = formatDistance(voiture)
     document.getElementById("tgv").textContent = formatDistance(tgv)
-    document.getElementById("bulbw").insertAdjacentHTML('beforeend', " " + BULBW + " W");
+    document.getElementById("bulbw").appendChild(document.createTextNode(" " + BULBW + " W"));
     document.getElementById("bulb").textContent = formatTime(ampoule)
     document.getElementById("breathing").textContent = formatTime(respiration)
 

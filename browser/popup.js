@@ -113,7 +113,7 @@ async function calculate() {
     TGV = preferencesValues.TGV ? parseFloat(preferencesValues.TGV) : 2.30e-3; // en g CO2e/m
     BULB = preferencesValues.BULB ? parseFloat(preferencesValues.BULB) : 0.0520 / 60; // en g CO2e/(W.min) (électricité)
     BULBW = preferencesValues.BULBW ? parseFloat(preferencesValues.BULBW) : 40; // en W
-    document.getElementById("bulbw").insertAdjacentHTML('beforeend', " " + BULBW + " W");
+    document.getElementById("bulbw").appendChild(document.createTextNode(" " + BULBW + " W"));
     BREATHING = preferencesValues.BREATHING ? parseFloat(preferencesValues.BREATHING) : 1.131; // en g CO2/min
 
     YEAR = 365.25 * 24 * 3600 * 1000; // ms
