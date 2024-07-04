@@ -281,5 +281,4 @@ document.addEventListener("DOMContentLoaded", function() {
     browser.tabs.query({ currentWindow: true })
         .then(calculate)
         .catch(onError);
-    console.log(document.getElementById("co2").parentElement.innerHTML);
 });
